@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import '../../../data/provider/superbase_provider.dart';
 
 class HomeController extends GetxController {
   final userData = {}.obs;
@@ -13,8 +14,8 @@ class HomeController extends GetxController {
   Future<void> getUserData() async {
     try {
       isLoading.value = true;
-      // final data = await SuperBaseProvider.instance.getUserProfile();
-      // userData.value = data;
+      final data = await SuperBaseProvider.instance.getUserProfile();
+      userData.value = data;
     } catch (e) {
       Get.snackbar('Error', e.toString());
     } finally {
