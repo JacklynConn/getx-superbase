@@ -9,6 +9,8 @@ abstract class Routes {
   static const PROFIEL = _Paths.PROFIEL;
   static const SPLASH = _Paths.SPLASH;
   static const AUTHENTICATION = _Paths.AUTHENTICATION;
+  static const UPLOADPRODUCT = _Paths.UPLOADPRODUCT;
+  static const UPLOAD_PRODUCT = _Paths.UPLOAD_PRODUCT;
 }
 
 abstract class _Paths {
@@ -19,4 +21,6 @@ abstract class _Paths {
   static const PROFIEL = '/profiel';
   static const SPLASH = '/splash';
   static const AUTHENTICATION = '/authentication';
+  static const UPLOADPRODUCT = '/uploadproduct';
+  static const UPLOAD_PRODUCT = '/upload-product';
 }

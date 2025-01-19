@@ -6,10 +6,9 @@ import 'package:superbase_project/app/routes/app_pages.dart';
 class SuperBaseProvider {
   static SuperBaseProvider instance = SuperBaseProvider.privateConstructor();
   final storage = GetStorage();
-
   SuperBaseProvider.privateConstructor();
-
   final supabase = Supabase.instance.client;
+
 
   Future<void> signup({
     required String name,

@@ -38,6 +38,7 @@ dependencies:
   supabase_flutter: ^2.8.3
   animated_text_kit: ^4.2.2
   get_storage: ^2.1.1
+  mime: ^2.0.0
 
 
 dev_dependencies:

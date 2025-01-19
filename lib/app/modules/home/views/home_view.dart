@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../data/provider/superbase_provider.dart';
+import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -10,10 +11,7 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     controller.getUserData();
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('HomeView'),
-        centerTitle: true,
-      ),
+      appBar: _buildAppBar,
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -85,4 +83,19 @@ class HomeView extends GetView<HomeController> {
       ),
     );
   }
+}
+
+AppBar get _buildAppBar {
+  return AppBar(
+    title: const Text('HomeView'),
+    centerTitle: true,
+    actions: [
+      IconButton(
+        onPressed: () {
+          Get.toNamed(Routes.UPLOAD_PRODUCT);
+        },
+        icon: Icon(Icons.add),
+      ),
+    ],
+  );
 }
