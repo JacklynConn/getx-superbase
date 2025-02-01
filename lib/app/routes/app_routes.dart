@@ -11,6 +11,9 @@ abstract class Routes {
   static const AUTHENTICATION = _Paths.AUTHENTICATION;
   static const UPLOADPRODUCT = _Paths.UPLOADPRODUCT;
   static const UPLOAD_PRODUCT = _Paths.UPLOAD_PRODUCT;
+  static const PRODUCTDETAIL = _Paths.PRODUCTDETAIL;
+  static const PRODUCT_DETAIL = _Paths.PRODUCT_DETAIL;
+  static const EDITE_PRODUCT = _Paths.EDITE_PRODUCT;
 }
 
 abstract class _Paths {
@@ -23,4 +26,7 @@ abstract class _Paths {
   static const AUTHENTICATION = '/authentication';
   static const UPLOADPRODUCT = '/uploadproduct';
   static const UPLOAD_PRODUCT = '/upload-product';
+  static const PRODUCTDETAIL = '/productdetail';
+  static const PRODUCT_DETAIL = '/product-detail';
+  static const EDITE_PRODUCT = '/edite-product';
 }

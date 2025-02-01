@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:mime/mime.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:superbase_project/app/routes/app_pages.dart';
 
@@ -8,7 +11,6 @@ class SuperBaseProvider {
   final storage = GetStorage();
   SuperBaseProvider.privateConstructor();
   final supabase = Supabase.instance.client;
-
 
   Future<void> signup({
     required String name,
@@ -77,7 +79,7 @@ class SuperBaseProvider {
         'name': userData['name'] ?? 'User',
         'id': user.id,
       };
-      
+
       // Store for future use
       await storage.write('user', userInfo);
       return userInfo;
@@ -93,6 +95,66 @@ class SuperBaseProvider {
       Get.offAllNamed(Routes.SPLASH);
     } catch (e) {
       throw 'Logout failed: $e';
+    }
+  }
+
+  // Upload Image
+  Future<String> uploadImage(File file, String bucket, String path) async {
+    try {
+      final mimeType = lookupMimeType(file.path) ?? '';
+      final bytes = await file.readAsBytes();
+
+      await supabase.storage.from(bucket).uploadBinary(
+            path,
+            bytes,
+            fileOptions: FileOptions(
+              contentType: mimeType,
+            ),
+          );
+      final publicUrl = supabase.storage.from(bucket).getPublicUrl(path);
+      return publicUrl;
+    } catch (e) {
+      Get.snackbar("Error", "Image upload Failed: $e");
+      throw 'Upload failed: $e';
+    }
+  }
+
+  Future<bool> saveProductToSupabase(Map<String, dynamic> product) async {
+    try {
+      final response = await supabase.from('products').insert(product).select();
+      if (response.isEmpty) {
+        throw Exception('Failed to save product');
+      }
+      return true;
+    } catch (e) {
+      Get.snackbar("Error", "Failed to save product: $e");
+      throw 'Failed to save product: $e';
+    }
+  }
+
+  Future<bool> updateProductInSupabase(String productId, Map<String, dynamic> product) async {
+    try {
+      final response = await supabase.from('products').update(product).eq('id', productId).select();
+      if (response.isEmpty) {
+        throw Exception('Failed to update product');
+      }
+      return true;
+    } catch (e) {
+      Get.snackbar("Error", "Failed to update product: $e");
+      throw 'Failed to update product: $e';
+    }
+  }
+
+  Future<bool> deleteProductFromSupabase(String productId) async {
+    try {
+      final response = await supabase.from('products').delete().eq('id', productId).select();
+      if (response.isEmpty) {
+        throw Exception('Failed to delete product');
+      }
+      return true;
+    } catch (e) {
+      Get.snackbar("Error", "Failed to delete product: $e");
+      throw 'Failed to delete product: $e';
     }
   }
 }

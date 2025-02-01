@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '/app/modules/uploadProduct/controllers/upload_product_controller.dart';
 
-class UploadProductView extends StatefulWidget {
-  const UploadProductView({super.key});
+class UploadProductView extends GetView<UploadProductController> {
+  UploadProductView({super.key});
 
-  @override
-  _UploadProductViewState createState() => _UploadProductViewState();
-}
-
-class _UploadProductViewState extends State<UploadProductView> {
-  String selectedSize = 'M';
-  String selectedColor = 'Red';
+  final List<String> sizes = ['M', 'L', 'XL', 'XXL'];
+  final List<String> colors = ['Red', 'Blue', 'Green', 'Yellow'];
 
   @override
   Widget build(BuildContext context) {
@@ -45,15 +42,36 @@ class _UploadProductViewState extends State<UploadProductView> {
                       ),
                     ],
                   ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.network(
-                      'http://shinyglows.com/storage/uploads/products/img-3.png',
-                      fit: BoxFit.cover,
-                    ),
+                  child: Obx(
+                    () {
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: controller.imageFile.value == null
+                            ? const Center(
+                                child: Icon(
+                                  Icons.image,
+                                  size: 100,
+                                  color: Colors.grey,
+                                ),
+                              )
+                            : Image.file(
+                                controller.imageFile.value!,
+                                fit: BoxFit.cover,
+                              ),
+                      );
+                    },
                   ),
                 ),
               ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                controller.pickImage();
+              },
+              child: const Text('Pick Image'),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -64,6 +82,7 @@ class _UploadProductViewState extends State<UploadProductView> {
                     height: 20,
                   ),
                   TextField(
+                    controller: controller.nameController,
                     decoration: const InputDecoration(
                       labelText: 'Product Name',
                       hintText: 'Enter Product Name',
@@ -78,6 +97,7 @@ class _UploadProductViewState extends State<UploadProductView> {
                     children: [
                       Expanded(
                         child: TextField(
+                          controller: controller.priceController,
                           decoration: const InputDecoration(
                             labelText: 'Price',
                             hintText: 'Enter Product Price',
@@ -94,6 +114,7 @@ class _UploadProductViewState extends State<UploadProductView> {
                       ),
                       Expanded(
                         child: TextField(
+                          controller: controller.quantityController,
                           decoration: const InputDecoration(
                             labelText: 'QTY',
                             hintText: 'Enter Product Quantity',
@@ -111,26 +132,30 @@ class _UploadProductViewState extends State<UploadProductView> {
                     children: [
                       const Text('Size: '),
                       Row(
-                        children: ['M', 'L', 'XL', 'XXL'].map((size) {
-                          return TextButton(
-                            onPressed: () {
-                              setState(() {
-                                selectedSize = size;
-                              });
-                            },
-                            child: Text(
-                              size,
-                              style: TextStyle(
-                                color: selectedSize == size
-                                    ? Colors.blue
-                                    : Colors.black,
-                                fontWeight: selectedSize == size
-                                    ? FontWeight.bold
-                                    : FontWeight.normal,
-                              ),
+                        children: [
+                          for (final size in sizes)
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 5),
+                              child: Obx((){
+                                return FilterChip(
+                                  label: Text(size),
+                                  labelStyle: TextStyle(
+                                    color: controller.selectSize.contains(size)
+                                        ? Colors.black
+                                        : Colors.blue,
+                                  ),
+                                  onSelected: (bool value) {
+                                    if (value) {
+                                      controller.selectSize.add(size);
+                                    } else {
+                                      controller.selectSize.remove(size);
+                                    }
+                                  },
+                                );
+                              })
                             ),
-                          );
-                        }).toList(),
+                        ],
                       ),
                     ],
                   ),
@@ -138,30 +163,35 @@ class _UploadProductViewState extends State<UploadProductView> {
                     children: [
                       const Text('Color: '),
                       Row(
-                        children: ['Red', 'Blue', 'Green', 'Yellow'].map((color) {
-                          return TextButton(
-                            onPressed: () {
-                              setState(() {
-                                selectedColor = color;
-                              });
-                            },
-                            child: Text(
-                              color,
-                              style: TextStyle(
-                                color: selectedColor == color
-                                    ? Colors.red
-                                    : Colors.black,
-                                fontWeight: selectedColor == color
-                                    ? FontWeight.bold
-                                    : FontWeight.normal,
-                              ),
+                        children: [
+                          for (final color in colors)
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 5),
+                              child: Obx((){
+                                return FilterChip(
+                                  label: Text(color),
+                                  labelStyle: TextStyle(
+                                    color: controller.selectColor.contains(color)
+                                        ? Colors.black
+                                        : Colors.blue,
+                                  ),
+                                  onSelected: (bool value) {
+                                    if (value) {
+                                      controller.selectColor.add(color);
+                                    } else {
+                                      controller.selectColor.remove(color);
+                                    }
+                                  },
+                                );
+                              })
                             ),
-                          );
-                        }).toList(),
+                        ],
                       ),
                     ],
                   ),
                   TextField(
+                    controller: controller.descriptionController,
                     decoration: const InputDecoration(
                       labelText: 'Description',
                       hintText: 'Enter Product Description',
@@ -175,6 +205,15 @@ class _UploadProductViewState extends State<UploadProductView> {
                   ),
                 ],
               ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                controller.uploadProduct();
+              },
+              child: const Text('Upload Product'),
             ),
           ],
         ),

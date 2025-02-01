@@ -1,11 +1,14 @@
 import 'package:get/get.dart';
-
 import '../modules/authentication/bindings/authentication_binding.dart';
 import '../modules/authentication/views/authentication_view.dart';
+import '../modules/editeProduct/bindings/edite_product_binding.dart';
+import '../modules/editeProduct/views/edite_product_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
+import '../modules/productDetail/bindings/product_detail_binding.dart';
+import '../modules/productDetail/views/product_detail_view.dart';
 import '../modules/signup/bindings/signup_binding.dart';
 import '../modules/signup/views/signup_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
@@ -48,8 +51,18 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.UPLOAD_PRODUCT,
-      page: () => const UploadProductView(),
+      page: () => UploadProductView(),
       binding: UploadProductBinding(),
+    ),
+    GetPage(
+      name: _Paths.PRODUCT_DETAIL,
+      page: () => const ProductDetailView(),
+      binding: ProductDetailBinding(),
+    ),
+    GetPage(
+      name: _Paths.EDITE_PRODUCT,
+      page: () => const EditProductView(),
+      binding: EditeProductBinding(),
     ),
   ];
 }
